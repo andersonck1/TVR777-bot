@@ -1,13 +1,12 @@
 {
-  "name": "anjos777-bot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "bot.js",
+  "name": "anjos777-bot-elite",
+  "version": "2.0.0",
+  "description": "Sistema de Sinais Profissional Anjos777",
+  "main": "api/sinal.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node api/sinal.js"
   },
   "dependencies": {
-    "canvas": "^2.11.2",
     "grammy": "^1.21.1"
   }
 }
