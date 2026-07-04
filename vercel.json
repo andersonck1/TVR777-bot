@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/api/sinal", "destination": "/bot.js" }
+  ]
+}
