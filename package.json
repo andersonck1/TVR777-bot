@@ -1,0 +1,13 @@
+{
+  "name": "anjos777-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "grammy": "^1.21.1"
+  }
+}
