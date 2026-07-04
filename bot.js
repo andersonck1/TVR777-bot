@@ -1,8 +1,8 @@
 const { Bot } = require('grammy');
 const { createCanvas } = require('canvas');
 
-const bot = new Bot(process.env.TELEGRAM_TOKEN);
-const GRUPO_ID = process.env.GRUPO_CHAT_ID;
+const bot = new Bot(process.env.7952068266:AAF1N1lo3V6FTid4KvNLngaP0-0uccKU580);
+const GRUPO_ID = process.env.-1004473816920;
 
 function gerarGraficoDashboard(percentagemSucesso) {
     const canvas = createCanvas(600, 350);
