@@ -1,7 +1,12 @@
 {
-  "name": "tvr777-bot-elite",
+  "name": "tvr777-bot",
   "version": "1.0.0",
+  "description": "Ecosystem Signal Bot Core Vercel Engine",
+  "main": "api/sinal.js",
   "dependencies": {
     "grammy": "^1.21.1"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
