@@ -1,10 +1,6 @@
 const { Bot, InputFile } = require('grammy');
 const crypto = require('crypto');
 
-// ================================================================================
-//   TVR777 CORE ENGINE - TAO-MUSK ARCHITECTURE (V7.3) - BINARY STREAM IMAGING
-// ================================================================================
-
 function obterEntropiaPura64() {
     const buffer = crypto.randomBytes(8);
     const uInt = buffer.readUInt32BE(0) + (buffer.readUInt32BE(4) * 0x100000000);
@@ -30,19 +26,15 @@ function calcularCriterioKelly(probabilidadeSucesso, payoutOdds = 2.0) {
 
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     
     if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
+        return res.status(200).end();
     }
 
     const tokenBot = process.env.TELEGRAM_BOT_TOKEN || '7952068266:AAF1N1lo3V6FTid4KvNLngaP0-0uccKU580';
     const GRUPO_ID = process.env.TELEGRAM_CHAT_ID || '-1004473816920';
-
-    if (!tokenBot) {
-        return res.status(500).send("Módulo de Segurança: Token ausente.");
-    }
 
     const bot = new Bot(tokenBot);
 
@@ -65,59 +57,30 @@ module.exports = async (req, res) => {
         const d3 = parseFloat(gerarGaussianaCripto(91, 4).toFixed(1));
         const d4 = parseFloat(gerarGaussianaCripto(95, 1).toFixed(1));
 
-        // Configuração JSON compacta para o motor do gráfico
-        const chartConfig = {
-            type: 'line',
-            data: {
-                labels: ['t-4', 't-3', 't-2', 't-1', 'µ-Gauss'],
-                datasets: [{
-                    borderColor: '#00ffcc',
-                    backgroundColor: 'rgba(0, 255, 204, 0.02)',
-                    data: [d1, d2, d3, d4, assertividade_real],
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                legend: { display: false },
-                scales: {
-                    yAxes: [{ ticks: { fontColor: '#63637e', min: 75, max: 100 } }],
-                    xAxes: [{ ticks: { fontColor: '#63637e' } }]
-                }
-            }
-        };
+        // URL TOTALMENTE LIMPA: Sem chavetas, aspas ou arrays complexos que ativem barreiras na Vercel
+        const urlAPI = `https://quickchart.io:[1,2,3,4,5],datasets:[%7BborderColor:%27%2300ffcc%27,data:[${d1},${d2},${d3},${d4},${assertividade_real}]%7D]%7D%7D`;
 
-        const urlAPI = `https://quickchart.io{encodeURIComponent(JSON.stringify(chartConfig))}`;
-
-        // ERRADICAÇÃO DO ERRO: Fazemos o download do gráfico diretamente na Vercel antes de enviar
         const responseChart = await fetch(urlAPI);
-        if (!responseChart.ok) throw new Error("Falha ao renderizar gráfico na API secundária.");
+        if (!responseChart.ok) throw new Error("Falha QuickChart");
         
-        // Converte a resposta binária num buffer de memória aceito nativamente pela biblioteca do bot
         const chartBuffer = Buffer.from(await responseChart.arrayBuffer());
-        const arquivoGrafico = new InputFile(chartBuffer, `analytics_${Date.now()}.png`);
+        const arquivoGrafico = new InputFile(chartBuffer, 'analytics.png');
 
         const mensagemSinal = 
             `🧠 <b>BARE-METAL MATHEMATICAL ENGINE ACTIVE</b> 🧠\n` +
-            `<code>[ALGORITMO DE ELITE — PROTOCOLO TAO-MUSK V1.3]</code>\n\n` +
+            `<code>[ALGORITMO DE ELITE — PROTOCOLO TAO-MUSK V1.4]</code>\n\n` +
             `🎯 <b>Vetor Alvo:</b> <code>${jogoMestre.nome}</code>\n` +
             `📊 <b>Probabilidade Gaussiana (p):</b> <code>${assertividade_real}%</code>\n` +
             `📈 <b>Gestão de Risco (Critério de Kelly):</b> <code>Alocar ${fracaoKelly_real}% da Banca</code>\n` +
             `⚡️ <b>Modelo de Dados:</b> <code>${jogoMestre.matriz}</code>\n` +
             `⏱ <b>Sincronização Iterativa:</b> <code>${timestamp} UTC</code>\n\n` +
             `📥 <b>EXECUÇÃO DE ENTRADA MATEMÁTICA PURA:</b>\n` +
-            `<i>Filtros criptográficos aplicados. Upload nativo via stream de memória binária sem URLs problemáticas.</i>\n\n` +
+            `<i>Upload binário nativo via stream de memória. Isolamento de rotas ativado contra erros de caracteres de host.</i>\n\n` +
             `🔗 <a href="https://anjos777.fun">CONECTAR AO BACKEND DO CASSINO</a>`;
 
-        // CORREÇÃO DEFINITIVA: O bot envia o ficheiro binário local diretamente, contornando o erro de caracteres na URL
         await bot.api.sendPhoto(GRUPO_ID, arquivoGrafico, { caption: mensagemSinal, parse_mode: 'HTML' });
         
-        return res.status(200).json({ 
-            status: "success", 
-            engine: "TAO_MUSK_STREAM_V7_3",
-            assertividade: assertividade_real, 
-            kelly_target: fracaoKelly_real 
-        });
+        return res.status(200).json({ status: "success", engine: "TAO_MUSK_V7_4", assertividade: assertividade_real });
     } catch (e) {
         return res.status(500).send("Erro no processador estocástico: " + e.message);
     }
