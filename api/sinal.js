@@ -2,7 +2,7 @@ const { Bot } = require('grammy');
 const crypto = require('crypto');
 
 // ================================================================================
-//   TVR777 CORE ENGINE - TAO-MUSK INTEGRATED ARCHITECTURE (V7.1) - TOKEN FIX
+//   TVR777 CORE ENGINE - TAO-MUSK ARCHITECTURE (V7.2) - FIX TELEGRAM 400
 // ================================================================================
 
 function obterEntropiaPura64() {
@@ -29,13 +29,19 @@ function calcularCriterioKelly(probabilidadeSucesso, payoutOdds = 2.0) {
 }
 
 module.exports = async (req, res) => {
-    // CORREÇÃO COGNITIVA: Token válido injetado nativamente no núcleo do bot
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
     const tokenBot = process.env.TELEGRAM_BOT_TOKEN || '7952068266:AAF1N1lo3V6FTid4KvNLngaP0-0uccKU580';
     const GRUPO_ID = process.env.TELEGRAM_CHAT_ID || '-1004473816920';
 
     if (!tokenBot) {
-        res.status(500).send("Erro Crítico de Infraestrutura: Token inválido ou corrompido.");
-        return;
+        return res.status(500).send("Módulo de Segurança: Token ausente.");
     }
 
     const bot = new Bot(tokenBot);
@@ -44,7 +50,7 @@ module.exports = async (req, res) => {
         const estadosJogos = [
             { id: 'TIGER', nome: '🐯 FORTUNE TIGER', payout: 2.0, matriz: 'Matriz Gauss-Markov Nível 4' },
             { id: 'MINES', nome: '💣 MINES QUANTUM', payout: 3.5, matriz: 'Matriz Padrão Bayesiana Nível 2' },
-            { id: 'AVIATOR', nome: '🚀 AVIATOR CRITICAL', payout: 2.0, matriz: 'Distribuição Exponencial Contínua' }
+            { id: 'AVIATOR', nome: '🚀 AVIATOR CRITICAL', payout: 2.0, matriz: 'Distribuição Exponencial Contânua' }
         ];
         
         const jogoMestre = estadosJogos[Math.floor(obterEntropiaPura64() * estadosJogos.length)];
@@ -52,45 +58,17 @@ module.exports = async (req, res) => {
         
         const assertividade_real = parseFloat(Math.min(Math.max(gauss * 1.3 + 96.2, 91.0), 99.9).toFixed(2));
         const fracaoKelly_real = calcularCriterioKelly(assertividade_real, jogoMestre.payout);
-
         const timestamp = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-        const chartConfig = {
-            type: 'line',
-            data: {
-                labels: ['t-4', 't-3', 't-2', 't-1', 'µ-Gauss'],
-                datasets: [{
-                    data: [
-                        parseFloat(gerarGaussianaCripto(92, 3).toFixed(1)),
-                        parseFloat(gerarGaussianaCripto(94, 2).toFixed(1)),
-                        parseFloat(gerarGaussianaCripto(91, 4).toFixed(1)),
-                        parseFloat(gerarGaussianaCripto(95, 1).toFixed(1)),
-                        assertividade_real
-                    ],
-                    borderColor: '#00ffcc',
-                    backgroundColor: 'rgba(0, 255, 204, 0.03)',
-                    borderWidth: 2,
-                    lineTension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#ff3366',
-                    fill: true
-                }]
-            },
-            options: {
-                title: { 
-                    display: true, 
-                    text: `ANALYTICS: ${jogoMestre.nome} | STOCHASTIC ENGINE`, 
-                    fontColor: '#ffffff', fontSize: 13, fontStyle: 'normal'
-                },
-                legend: { display: false },
-                scales: { 
-                    yAxes: [{ gridLines: { color: 'rgba(255,255,255,0.03)' }, ticks: { fontColor: '#63637e', min: 75, max: 100 } }],
-                    xAxes: [{ gridLines: { display: false }, ticks: { fontColor: '#63637e' } }]
-                }
-            }
-        };
+        // SOLUÇÃO DO ERRO 400: Simplificação extrema da string do gráfico para evitar caracteres ilegais na URL
+        // Passamos os dados num formato linear purificado, impedindo que o Telegram rejeite a requisição
+        const d1 = parseFloat(gerarGaussianaCripto(92, 3).toFixed(1));
+        const d2 = parseFloat(gerarGaussianaCripto(94, 2).toFixed(1));
+        const d3 = parseFloat(gerarGaussianaCripto(91, 4).toFixed(1));
+        const d4 = parseFloat(gerarGaussianaCripto(95, 1).toFixed(1));
 
-        const urlGrafico = `https://quickchart.io{encodeURIComponent(JSON.stringify(chartConfig))}`;
+        // URL linear plana gerada de forma segura para o barramento do Telegram
+        const urlGrafico = `https://quickchart.io:[1,2,3,4,5],datasets:[%7BborderColor:%27%2300ffcc%27,data:[${d1},${d2},${d3},${d4},${assertividade_real}]%7D]%7D%7D`;
 
         const mensagemSinal = 
             `🧠 <b>BARE-METAL MATHEMATICAL ENGINE ACTIVE</b> 🧠\n` +
@@ -104,16 +82,16 @@ module.exports = async (req, res) => {
             `<i>Filtros criptográficos aplicados. Ambiente isolado e livre de viés de amostragem por flutuação linear.</i>\n\n` +
             `🔗 <a href="https://anjos777.fun">CONECTAR AO BACKEND DO CASSINO</a>`;
 
+        // Dispara a foto usando a URL encriptada de forma plana na órbita da API
         await bot.api.sendPhoto(GRUPO_ID, urlGrafico, { caption: mensagemSinal, parse_mode: 'HTML' });
         
-        res.status(200).json({
-            status: "success",
-            engine: "TAO_MUSK_ESTOCASTICO_V7_1",
-            assertividade: assertividade_real,
-            kelly_target: fracaoKelly_real
+        return res.status(200).json({ 
+            status: "success", 
+            engine: "TAO_MUSK_ESTOCASTICO_V7_2",
+            assertividade: assertividade_real, 
+            kelly_target: fracaoKelly_real 
         });
     } catch (e) {
-        console.error(e.message);
-        res.status(500).send("Erro no processador estocástico: " + e.message);
+        return res.status(500).send("Erro no processador estocástico: " + e.message);
     }
 };
